@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student - Student Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>Student Management System</h1>
+                <div class="user-info">
+                    <span>Welcome, {{ session.username }}</span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Main Content -->
+        <main class="form-content">
+            <div class="form-container">
+                <h2>Add New Student</h2>
+                
+                <form method="POST" action="{{ url_for('add_student') }}" class="student-form" onsubmit="return validateStudentForm()">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="roll_no">Roll Number *</label>
+                            <input type="text" id="roll_no" name="roll_no" required 
+                                   placeholder="e.g., 2023CS001">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="name">Student Name *</label>
+                            <input type="text" id="name" name="name" required 
+                                   placeholder="e.g., John Doe">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="course">Course *</label>
+                            <select id="course" name="course" required>
+                                <option value="">Select Course</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Electrical">Electrical</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="semester">Semester *</label>
+                            <select id="semester" name="semester" required>
+                                <option value="">Select Semester</option>
+                                {% for sem in range(1, 9) %}
+                                    <option value="{{ sem }}">{{ sem }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marks">Marks (0-100) *</label>
+                            <input type="number" id="marks" name="marks" required 
+                                   min="0" max="100" placeholder="e.g., 85">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success">Add Student</button>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

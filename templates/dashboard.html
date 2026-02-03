@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Student Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>Student Management System</h1>
+                <div class="user-info">
+                    <span>Welcome, {{ session.username }}</span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <!-- Actions Section -->
+            <section class="actions-section">
+                <h2>Student Management</h2>
+                <div class="action-buttons">
+                    <a href="{{ url_for('add_student') }}" class="btn btn-success">Add New Student</a>
+                </div>
+            </section>
+            
+            <!-- Search Section -->
+            <section class="search-section">
+                <form method="GET" action="{{ url_for('dashboard') }}" class="search-form">
+                    <input type="text" name="search" placeholder="Search by Roll No or Name..." 
+                           value="{{ search }}" class="search-input">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    {% if search %}
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Clear</a>
+                    {% endif %}
+                </form>
+            </section>
+            
+            <!-- Students Table -->
+            <section class="students-section">
+                <h3>Student Records</h3>
+                {% if students %}
+                    <div class="table-container">
+                        <table class="students-table">
+                            <thead>
+                                <tr>
+                                    <th>Roll No</th>
+                                    <th>Name</th>
+                                    <th>Course</th>
+                                    <th>Semester</th>
+                                    <th>Marks</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in students %}
+                                    <tr>
+                                        <td>{{ student.roll_no }}</td>
+                                        <td>{{ student.name }}</td>
+                                        <td>{{ student.course }}</td>
+                                        <td>{{ student.semester }}</td>
+                                        <td>{{ student.marks }}</td>
+                                        <td>
+                                            <a href="{{ url_for('edit_student', student_id=student.id) }}" 
+                                               class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="{{ url_for('delete_student', student_id=student.id) }}" 
+                                               class="btn btn-sm btn-danger" 
+                                               onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="no-records">
+                        <p>No student records found.</p>
+                        {% if search %}
+                            <p>No results for "{{ search }}". <a href="{{ url_for('dashboard') }}">View all students</a></p>
+                        {% else %}
+                            <p><a href="{{ url_for('add_student') }}">Add your first student</a></p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </section>
+            
+            <!-- Statistics -->
+            <section class="stats-section">
+                <h3>Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Total Students</h4>
+                        <p class="stat-number">{{ students|length }}</p>
+                    </div>
+                    {% if students %}
+                        {% set total_marks = students|sum(attribute='marks') %}
+                        {% set avg_marks = (total_marks / students|length)|round(2) %}
+                        <div class="stat-card">
+                            <h4>Average Marks</h4>
+                            <p class="stat-number">{{ avg_marks }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
