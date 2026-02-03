@@ -3,98 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Student - Student Management System</title>
+    <title>Edit Student - StudentHub</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="dashboard-header">
-            <div class="header-content">
-                <h1>Student Management System</h1>
-                <div class="user-info">
-                    <span>Welcome, {{ session.username }}</span>
-                    <a href="{{ url_for('logout') }}" class="btn btn-logout">Logout</a>
-                </div>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('dashboard') }}" class="sidebar-logo">
+                    <div class="sidebar-logo-icon">SMS</div>
+                    <span>StudentHub</span>
+                </a>
             </div>
-        </header>
-        
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
+            
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('dashboard') }}" class="nav-item">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item active">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    Students
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                    Teachers
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    Courses
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                    </svg>
+                    Attendance
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                    Results
+                </a>
+                <a href="#" class="nav-item">
+                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Top Navigation Bar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                 </div>
-            {% endif %}
-        {% endwith %}
-        
-        <!-- Main Content -->
-        <main class="form-content">
-            <div class="form-container">
-                <h2>Edit Student Details</h2>
                 
-                <form method="POST" action="{{ url_for('edit_student', student_id=student.id) }}" 
-                      class="student-form" onsubmit="return validateStudentForm()">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="roll_no">Roll Number *</label>
-                            <input type="text" id="roll_no" name="roll_no" required 
-                                   value="{{ student.roll_no }}" placeholder="e.g., 2023CS001">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="name">Student Name *</label>
-                            <input type="text" id="name" name="name" required 
-                                   value="{{ student.name }}" placeholder="e.g., John Doe">
-                        </div>
+                <div class="topbar-right">
+                    <div class="user-menu">
+                        <div class="user-avatar">{{ session.username[0]|upper }}</div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="course">Course *</label>
-                            <select id="course" name="course" required>
-                                <option value="">Select Course</option>
-                                <option value="Computer Science" {% if student.course == 'Computer Science' %}selected{% endif %}>Computer Science</option>
-                                <option value="Information Technology" {% if student.course == 'Information Technology' %}selected{% endif %}>Information Technology</option>
-                                <option value="Electronics" {% if student.course == 'Electronics' %}selected{% endif %}>Electronics</option>
-                                <option value="Mechanical" {% if student.course == 'Mechanical' %}selected{% endif %}>Mechanical</option>
-                                <option value="Civil" {% if student.course == 'Civil' %}selected{% endif %}>Civil</option>
-                                <option value="Electrical" {% if student.course == 'Electrical' %}selected{% endif %}>Electrical</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="semester">Semester *</label>
-                            <select id="semester" name="semester" required>
-                                <option value="">Select Semester</option>
-                                {% for sem in range(1, 9) %}
-                                    <option value="{{ sem }}" {% if student.semester == sem %}selected{% endif %}>{{ sem }}</option>
-                                {% endfor %}
-                            </select>
+                    <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm">Logout</a>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <main class="page-content">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} animate-in">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                                    {% if category == 'success' %}
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    {% elif category == 'error' %}
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                    {% else %}
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                    {% endif %}
+                                </svg>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-sm">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Back
+                        </a>
+                        <h1 class="page-title">Edit Student</h1>
+                    </div>
+                    <p class="page-subtitle">Update the information for <strong>{{ student.name }}</strong>.</p>
+                </div>
+                
+                <!-- Student Info Card -->
+                <div class="content-card animate-in" style="margin-bottom: var(--space-6);">
+                    <div class="card-body">
+                        <div style="display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4); background: var(--gray-50); border-radius: var(--radius-lg);">
+                            <div style="width: 48px; height: 48px; background: var(--primary-100); color: var(--primary-600); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.25rem;">
+                                {{ student.name[0]|upper }}{{ student.name.split(' ')[-1][0]|upper if student.name.split(' ')|length > 1 else '' }}
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--gray-900); margin-bottom: var(--space-1);">{{ student.name }}</div>
+                                <div style="font-size: 0.875rem; color: var(--gray-600);">Roll No: {{ student.roll_no }} • {{ student.course }} • Semester {{ student.semester }}</div>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="marks">Marks (0-100) *</label>
-                            <input type="number" id="marks" name="marks" required 
-                                   min="0" max="100" value="{{ student.marks }}" placeholder="e.g., 85">
-                        </div>
+                </div>
+                
+                <!-- Form Card -->
+                <div class="content-card animate-in">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('edit_student', student_id=student.id) }}" onsubmit="return validateStudentForm()">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="roll_no" class="form-label">Roll Number *</label>
+                                    <input type="text" id="roll_no" name="roll_no" class="form-input" 
+                                           value="{{ student.roll_no }}" placeholder="e.g., 2023CS001" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="name" class="form-label">Student Name *</label>
+                                    <input type="text" id="name" name="name" class="form-input" 
+                                           value="{{ student.name }}" placeholder="e.g., John Doe" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="course" class="form-label">Course *</label>
+                                    <select id="course" name="course" class="form-select" required>
+                                        <option value="">Select Course</option>
+                                        <option value="Computer Science" {% if student.course == 'Computer Science' %}selected{% endif %}>Computer Science</option>
+                                        <option value="Information Technology" {% if student.course == 'Information Technology' %}selected{% endif %}>Information Technology</option>
+                                        <option value="Electronics" {% if student.course == 'Electronics' %}selected{% endif %}>Electronics</option>
+                                        <option value="Mechanical" {% if student.course == 'Mechanical' %}selected{% endif %}>Mechanical</option>
+                                        <option value="Civil" {% if student.course == 'Civil' %}selected{% endif %}>Civil</option>
+                                        <option value="Electrical" {% if student.course == 'Electrical' %}selected{% endif %}>Electrical</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="semester" class="form-label">Semester *</label>
+                                    <select id="semester" name="semester" class="form-select" required>
+                                        <option value="">Select Semester</option>
+                                        {% for sem in range(1, 9) %}
+                                            <option value="{{ sem }}" {% if student.semester == sem %}selected{% endif %}>{{ sem }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="marks" class="form-label">Marks (0-100) *</label>
+                                    <input type="number" id="marks" name="marks" class="form-input" 
+                                           min="0" max="100" value="{{ student.marks }}" placeholder="e.g., 85" required>
+                                    <small style="color: var(--gray-500); margin-top: var(--space-1); display: block;">
+                                        Enter marks between 0 and 100
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Update Student
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-success">Update Student</button>
-                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
-                    </div>
-                </form>
-            </div>
-        </main>
+                </div>
+            </main>
+        </div>
     </div>
     
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('open');
+        }
+    </script>
 </body>
 </html>

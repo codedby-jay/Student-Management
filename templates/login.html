@@ -3,47 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Management System - Login</title>
+    <title>Login - StudentHub</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <div class="login-container">
-            <div class="login-header">
-                <h1>Student Management System</h1>
-                <p>Diploma Final Project</p>
+<body class="login-page">
+    <div class="login-container animate-in">
+        <div class="login-header">
+            <div class="login-logo">SH</div>
+            <h1 class="login-title">Welcome to StudentHub</h1>
+            <p class="login-subtitle">Sign in to manage your student database</p>
+        </div>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} animate-in">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                            {% if category == 'success' %}
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            {% elif category == 'error' %}
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            {% else %}
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            {% endif %}
+                        </svg>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form class="login-form" method="POST" action="{{ url_for('login') }}" onsubmit="return validateLoginForm()">
+            <div class="form-group">
+                <label for="username" class="form-label">Username</label>
+                <div style="position: relative;">
+                    <svg width="20" height="20" fill="none" stroke="var(--gray-400)" viewBox="0 0 24 24" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required style="padding-left: 40px;">
+                </div>
             </div>
             
-            <!-- Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <form class="login-form" method="POST" action="{{ url_for('login') }}" onsubmit="return validateLoginForm()">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <div style="position: relative;">
+                    <svg width="20" height="20" fill="none" stroke="var(--gray-400)" viewBox="0 0 24 24" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required style="padding-left: 40px;">
                 </div>
-                
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-            
-            <div class="login-info">
-                <p><strong>Default Credentials:</strong></p>
-                <p>Username: admin</p>
-                <p>Password: admin123</p>
             </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                </svg>
+                Sign In
+            </button>
+        </form>
+        
+        <div style="margin-top: var(--space-6); padding-top: var(--space-6); border-top: 1px solid var(--gray-200);">
+            <div style="background: var(--gray-50); padding: var(--space-4); border-radius: var(--radius-lg); border-left: 4px solid var(--primary-500);">
+                <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2);">
+                    <svg width="16" height="16" fill="var(--primary-600)" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span style="font-weight: 600; color: var(--gray-700);">Demo Credentials</span>
+                </div>
+                <div style="font-size: 0.875rem; color: var(--gray-600); line-height: 1.5;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-1);">
+                        <span>Username:</span>
+                        <code style="background: white; padding: 2px 6px; border-radius: var(--radius-sm); font-family: var(--font-mono);">admin</code>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Password:</span>
+                        <code style="background: white; padding: 2px 6px; border-radius: var(--radius-sm); font-family: var(--font-mono);">admin123</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: var(--space-6); color: var(--gray-500); font-size: 0.75rem;">
+            <p>© 2024 StudentHub. Built for educational purposes.</p>
         </div>
     </div>
     
